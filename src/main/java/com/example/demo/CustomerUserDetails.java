@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.business.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;

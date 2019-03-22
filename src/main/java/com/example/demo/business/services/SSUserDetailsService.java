@@ -1,5 +1,9 @@
-package com.example.demo;
+package com.example.demo.business.services;
 
+import com.example.demo.CustomerUserDetails;
+import com.example.demo.business.entities.Role;
+import com.example.demo.business.entities.User;
+import com.example.demo.business.entities.repositories.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

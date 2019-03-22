@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.business.entities;
 
 import org.springframework.lang.NonNull;
 

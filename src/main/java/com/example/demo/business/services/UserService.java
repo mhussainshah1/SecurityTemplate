@@ -1,5 +1,8 @@
-package com.example.demo;
+package com.example.demo.business.services;
 
+import com.example.demo.business.entities.User;
+import com.example.demo.business.entities.repositories.RoleRepository;
+import com.example.demo.business.entities.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

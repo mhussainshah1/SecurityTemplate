@@ -1,5 +1,12 @@
 package com.example.demo;
 
+import com.example.demo.business.entities.Course;
+import com.example.demo.business.entities.Role;
+import com.example.demo.business.entities.User;
+import com.example.demo.business.entities.repositories.CourseRepository;
+import com.example.demo.business.entities.repositories.RoleRepository;
+import com.example.demo.business.entities.repositories.UserRepository;
+import com.example.demo.business.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;

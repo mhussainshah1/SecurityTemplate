@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.business.util;
 
+import com.example.demo.business.util.ValidPassword;
 import org.passay.*;
 import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;

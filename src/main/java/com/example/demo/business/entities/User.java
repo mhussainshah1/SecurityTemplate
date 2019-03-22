@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.business.entities;
 
+import com.example.demo.business.util.ValidPassword;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
