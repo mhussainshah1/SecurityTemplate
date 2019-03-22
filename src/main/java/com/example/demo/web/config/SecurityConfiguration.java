@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.web.config;
 
 import com.example.demo.business.entities.repositories.UserRepository;
 import com.example.demo.business.services.SSUserDetailsService;

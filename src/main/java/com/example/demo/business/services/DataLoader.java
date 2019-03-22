@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.business.services;
 
 import com.example.demo.business.entities.Course;
 import com.example.demo.business.entities.Role;

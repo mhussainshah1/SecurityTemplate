@@ -1,6 +1,6 @@
 package com.example.demo.web.controller;
 
-import com.example.demo.CustomerUserDetails;
+import com.example.demo.business.CustomerUserDetails;
 import com.example.demo.business.entities.Course;
 import com.example.demo.business.entities.User;
 import com.example.demo.business.entities.repositories.CourseRepository;
