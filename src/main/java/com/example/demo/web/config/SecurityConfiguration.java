@@ -38,10 +38,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/","/h2-console/**","/termsandconditions", "/register",
                         "/css/**","/js/**","/img/**",
-                        "/about").permitAll()
-// , "/detail/** "
+                        "/detail/{id} ","/about").permitAll()
 //                .access("hasAnyAuthority('USER','ADMIN')")
-//                .antMatchers("/admin").access("hasAuthority('ADMIN')")
+                .antMatchers("/admin").access("hasAuthority('ADMIN')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll()
@@ -61,11 +60,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void  configure(AuthenticationManagerBuilder auth) throws Exception{
         auth.userDetailsService(userDetailsServiceBean())
                 .passwordEncoder(passwordEncoder());
-       /* auth.inMemoryAuthentication()
-                .withUser("dave").password(passwordEncoder().encode("begreat"))
-                    .authorities("ADMIN")
-                .and()
-                .withUser("user").password(passwordEncoder().encode("password"))
-                    .authorities("USER");*/
     }
 }

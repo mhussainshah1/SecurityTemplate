@@ -6,6 +6,7 @@ import com.example.demo.business.entities.User;
 import com.example.demo.business.entities.repositories.CourseRepository;
 import com.example.demo.business.entities.repositories.UserRepository;
 import com.example.demo.business.services.UserService;
+import com.example.demo.business.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -36,55 +37,14 @@ public class HomeController {
         return "list";
     }
 
-    @RequestMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/register")
-    public String showRegistrationPage(Model model) {
-        model.addAttribute("user", new User());
-        return "register";
-    }
-
-    @PostMapping("/register")
-    public String processRegistrationPage(@Valid @ModelAttribute("user") User user,
-                                          BindingResult result,
-                                          Model model,
-                                          @RequestParam("password") String pw) {
-        System.out.println("pw: " + pw);
-        model.addAttribute("user", user);
-        if (result.hasErrors()) {
-            return "register";
-        } else {
-            user.encode(pw);
-            userService.saveUser(user);
-            model.addAttribute("message", "New User Account Successfully Created");
-        }
-        return "login";
-    }
-
-
-    @RequestMapping("/updateUser")
-    public String viewUser(Model model,
-//                           HttpServletRequest request,
-//                           Authentication authentication,
-                           Principal principal) {
-//        Boolean isAdmin = request.isUserInRole("ADMIN");
-//        Boolean isUser = request.isUserInRole("USER");
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        String username = principal.getName();
-//        model.addAttribute("user", userRepository.findByUsername(username));
-        return "register";
-    }
-
-    //ASK DAVE!!!
+    //Users with Admin role can view this page
     @RequestMapping("/admin")
     public String admin() {
         return "admin";
     }
 
-    //ASK DAVE!!!
+    //AUXILLARY FUNCTION!!!
+    //Use the below code INSIDE METHOD to pass user into view
     @RequestMapping("/secure")
     public String secure(Principal principal, Model model) {
         User myuser = ((CustomerUserDetails)
@@ -130,15 +90,16 @@ public class HomeController {
         return "redirect:/";
     }
 
-    @GetMapping("/termsandconditions")
-    public String getTermsAndCondition() {
-        return "termsandconditions";
+    @RequestMapping("/profile")
+    public String getProfile(Principal principal, Model model) {
+        if (userService.getUser() != null) {
+            model.addAttribute("user", userService.getUser());
+            model.addAttribute("HASH", MD5Util.md5Hex(userService.getUser().getEmail()));
+        }
+        return "profile";
     }
 
-    @PostMapping("/forgot-password")
-    public String forgetPassword() {
-        return "/";
-    }
+
 
     @GetMapping("/about")
     public String getAbout() {
