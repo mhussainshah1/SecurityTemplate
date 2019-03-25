@@ -6,7 +6,6 @@ import com.example.demo.business.entities.User;
 import com.example.demo.business.entities.repositories.CourseRepository;
 import com.example.demo.business.entities.repositories.RoleRepository;
 import com.example.demo.business.entities.repositories.UserRepository;
-import com.example.demo.business.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +25,7 @@ public class DataLoader implements CommandLineRunner {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    CourseRepository repository;
+    CourseRepository courseRepository;
 
     @Autowired
     UserService userService;
@@ -49,14 +48,14 @@ public class DataLoader implements CommandLineRunner {
 
         Course course = new Course("Astrophysics", "Neli D Tyson", "Just a course on stars", 3);
         course.setUser(user);
-        repository.save(course);
+        courseRepository.save(course);
 
         course = new Course("Calculus", "Carol Henley", "Rate of change of rate of change", 3);
         course.setUser(user);
-        repository.save(course);
+        courseRepository.save(course);
 
         course = new Course("Freshman English", "Geraldine Pegram", "Learn your language chilern", 3);
         course.setUser(user);
-        repository.save(course);
+        courseRepository.save(course);
     }
 }

@@ -32,6 +32,7 @@
 
         <td sec:authorize="hasAuthority('ADMIN')">
             <!--<span th:if="${user_id == course.user.id}">
+
                 </span>-->
             <a th:href="@{/update/{id}(id=${course.id})}">Edit</a>-<!-- Update -->
             <a th:href="@{/delete/{id}(id=${course.id})}">Delete</a><!-- Delete -->
