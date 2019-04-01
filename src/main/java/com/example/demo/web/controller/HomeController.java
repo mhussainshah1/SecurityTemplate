@@ -66,7 +66,6 @@ public class HomeController {
         if (result.hasErrors()) {
             return "courseform";
         }
-
         course.setUser(userService.getUser());
         courseRepository.save(course);//generate SQL statement and insert into database
         return "redirect:/";
@@ -98,8 +97,6 @@ public class HomeController {
         }
         return "profile";
     }
-
-
 
     @GetMapping("/about")
     public String getAbout() {

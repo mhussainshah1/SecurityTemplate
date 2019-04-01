@@ -52,6 +52,7 @@ public class UserService {
         user.setEnabled(true);
         userRepository.save(user);
     }
+
     // returns currently logged in user
     public User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
