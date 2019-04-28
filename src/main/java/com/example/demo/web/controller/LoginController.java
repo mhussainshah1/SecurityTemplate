@@ -39,14 +39,10 @@ public class LoginController {
         return "register";
     }
 
-    @GetMapping("/termsandconditions")
-    public String getTermsAndCondition() {
-        return "termsandconditions";
-    }
-
     @PostMapping("/register")
     public String processRegistrationPage(@Valid @ModelAttribute("user") User user, BindingResult result, Model model, @RequestParam("password") String pw) {
         System.out.println("pw: " + pw);
+
         if (result.hasErrors()) {
             model.addAttribute("user", user);
             return "register";
@@ -62,20 +58,24 @@ public class LoginController {
                     user.getPets().add(pet);
                 }
             }*/
-            if(userService.isUser()){
+            if (userService.isUser()) {
                 user.setPassword(userService.encode(pw));
                 userService.saveUser(user);
             }
-            if(userService.isAdmin()){
+            if (userService.isAdmin()) {
                 user.setPassword(userService.encode(pw));
                 userService.saveAdmin(user);
             }
             model.addAttribute("message", "User Account Successfully Created");
-
-
         }
         return "login";
     }
+
+    @GetMapping("/termsandconditions")
+    public String getTermsAndCondition() {
+        return "termsandconditions";
+    }
+
     @RequestMapping("/updateUser")
     public String viewUser(Model model, HttpServletRequest request, Authentication authentication, Principal principal) {
        /* Boolean isAdmin = request.isUserInRole("ADMIN");

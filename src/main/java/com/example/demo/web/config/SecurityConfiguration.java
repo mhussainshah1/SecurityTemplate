@@ -20,25 +20,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private SSUserDetailsService userDetailService;
 
     @Autowired
-    private UserRepository appUserRepository;
+    private UserRepository userRepository;
 
     @Bean
-    public static BCryptPasswordEncoder passwordEncoder(){
+    public static BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Override
-    public UserDetailsService userDetailsServiceBean() throws Exception{
-        return new SSUserDetailsService(appUserRepository);
+    public UserDetailsService userDetailsServiceBean() throws Exception {
+        return new SSUserDetailsService(userRepository);
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception{
+    protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/","/h2-console/**","/termsandconditions", "/register",
-                        "/css/**","/js/**","/img/**",
-                        "/detail/{id} ","/about").permitAll()
+                .antMatchers("/", "/h2/**", "/termsandconditions", "/register",
+                        "/css/**", "/js/**", "/img/**",
+                        "/detail/{id} ", "/about").permitAll()
 //                .access("hasAnyAuthority('USER','ADMIN')")
                 .antMatchers("/admin").access("hasAuthority('ADMIN')")
                 .anyRequest().authenticated()
@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void  configure(AuthenticationManagerBuilder auth) throws Exception{
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsServiceBean())
                 .passwordEncoder(passwordEncoder());
     }
