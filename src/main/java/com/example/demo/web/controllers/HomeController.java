@@ -7,14 +7,12 @@ import com.example.demo.business.entities.repositories.UserRepository;
 import com.example.demo.business.services.CustomerUserDetails;
 import com.example.demo.business.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
@@ -31,11 +29,28 @@ public class HomeController {
     UserService userService;
 
     @RequestMapping("/")
-    public String listCourses(Model model) {
-        model.addAttribute("courses", courseRepository.findAll()); //generate select * statement
-        if (userService.getUser() != null) {
+    public String listItems(Model model, @RequestParam(defaultValue = "0") int page) {
+        var user = userService.getUser();
+        /**
+         * Alternative way to get user
+         *-----------------------------
+         *  var myuser = ((CustomerUserDetails)
+         *                 ((UsernamePasswordAuthenticationToken) principal)
+         *                         .getPrincipal())
+         *                 .getUsers();
+         */
+        if (user != null) {
             model.addAttribute("user_id", userService.getUser().getId());
+            if (userService.isUser()) {
+                model.addAttribute("courses", courseRepository.findAllByUser(user, PageRequest.of(page, 4)));
+            }
+            if (userService.isAdmin()) {
+                model.addAttribute("courses", courseRepository.findAll(PageRequest.of(page, 4)));
+            }
+        } else {
+            model.addAttribute("courses", courseRepository.findAll(PageRequest.of(page, 4)));
         }
+        model.addAttribute("currentPage", page);
         return "list";
     }
 
@@ -81,7 +96,8 @@ public class HomeController {
     }
 
     @RequestMapping("/update/{id}")
-    public String updateCourse(@PathVariable("id") long id, Model model) {
+    public String updateCourse(@PathVariable("id") long id,
+                               Model model) {
         model.addAttribute("course", courseRepository.findById(id).get());
         return "courseform";
     }
@@ -90,6 +106,20 @@ public class HomeController {
     public String delCourse(@PathVariable("id") long id) {
         courseRepository.deleteById(id);
         return "redirect:/";
+    }
+
+    @PostMapping("/check")
+    public String check(@RequestParam("check") long[] ids,
+                        @RequestParam("name") String name,
+                        Model model) {
+        // delete selected
+        if (name.equals("delete")) {
+            for (var id : ids) {
+                courseRepository.deleteById(id);
+            }
+            return "redirect:/";
+        }
+        return "list";
     }
 
     @GetMapping("/about")

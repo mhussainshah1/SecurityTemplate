@@ -1,7 +1,11 @@
 package com.example.demo.business.entities.repositories;
 
 import com.example.demo.business.entities.Course;
-import org.springframework.data.repository.CrudRepository;
+import com.example.demo.business.entities.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CourseRepository extends CrudRepository<Course, Long> {
+public interface CourseRepository extends JpaRepository<Course, Long> {
+    Page<Course> findAllByUser(User user, Pageable pageable);
 }
