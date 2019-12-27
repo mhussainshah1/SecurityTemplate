@@ -1,12 +1,11 @@
-package com.example.demo.web.controller;
+package com.example.demo.web.controllers;
 
-import com.example.demo.business.CustomerUserDetails;
 import com.example.demo.business.entities.Course;
 import com.example.demo.business.entities.User;
 import com.example.demo.business.entities.repositories.CourseRepository;
 import com.example.demo.business.entities.repositories.UserRepository;
+import com.example.demo.business.services.CustomerUserDetails;
 import com.example.demo.business.services.UserService;
-import com.example.demo.business.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -42,7 +41,8 @@ public class HomeController {
 
     //Users with Admin role can view this page
     @RequestMapping("/admin")
-    public String admin() {
+    public String admin(Model model) {
+        model.addAttribute("users", userRepository.findAll());
         return "admin";
     }
 
@@ -90,15 +90,6 @@ public class HomeController {
     public String delCourse(@PathVariable("id") long id) {
         courseRepository.deleteById(id);
         return "redirect:/";
-    }
-
-    @RequestMapping("/profile")
-    public String getProfile(Principal principal, Model model) {
-        if (userService.getUser() != null) {
-            model.addAttribute("user", userService.getUser());
-            model.addAttribute("HASH", MD5Util.md5Hex(userService.getUser().getEmail()));
-        }
-        return "profile";
     }
 
     @GetMapping("/about")

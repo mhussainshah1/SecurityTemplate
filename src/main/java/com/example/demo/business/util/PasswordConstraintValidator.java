@@ -1,25 +1,32 @@
 package com.example.demo.business.util;
 
+import com.example.demo.business.entities.repositories.InvalidPasswordRepository;
 import org.passay.*;
+import org.passay.dictionary.ArrayWordList;
 import org.passay.dictionary.WordListDictionary;
-import org.passay.dictionary.WordLists;
-import org.passay.dictionary.sort.ArraysSort;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import java.io.FileReader;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collections;
 
+//@Configuration
+@Component
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
+
+    @Autowired
+    private InvalidPasswordRepository invalidPasswordRepository;
 
     private DictionaryRule dictionaryRule;
 
     @Override
-    public void initialize(ValidPassword constraintAnnotation) {
-        try {
+    public void initialize(ValidPassword validPassword) {
+
+        //Option 1 : Through File
+        /*try {
             String invalidPasswordList = this.getClass().getResource("/invalid-password-list.txt").getFile();
             dictionaryRule = new DictionaryRule(
                     new WordListDictionary(WordLists.createFromReader(
@@ -34,15 +41,29 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
                     )));
         } catch (IOException e) {
             throw new RuntimeException("could not load word list", e);
+        }*/
+
+        //Option 2 : Through Database
+        var passwords = new ArrayList<String>();
+//        invalidPasswordRepository.findAll().forEach(p -> passwords.add(p.getValue()));
+
+        for (var password : invalidPasswordRepository.findAll()) {
+            System.out.println("invalid password = " + password.getValue());
+            passwords.add(password.getValue());
         }
+
+        Collections.sort(passwords);
+        dictionaryRule = new DictionaryRule(
+                new WordListDictionary(
+                        new ArrayWordList(passwords.toArray(new String[0]))));
+
     }
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
-        PasswordValidator validator = new PasswordValidator(Arrays.asList(
-
+        var validator = new PasswordValidator(Arrays.asList(
                 // at least 8 characters
-                new LengthRule(8, 100),
+                new LengthRule(8, 60),
 
                 // at least one upper-case character
                 new CharacterRule(EnglishCharacterData.UpperCase, 1),
@@ -63,14 +84,14 @@ public class PasswordConstraintValidator implements ConstraintValidator<ValidPas
                 dictionaryRule
         ));
 
-        RuleResult result = validator.validate(new PasswordData(password));
+        var ruleResult = validator.validate(new PasswordData(password));
 
-        if (result.isValid()) {
+        if (ruleResult.isValid()) {
             return true;
         }
 
-        List<String> messages = validator.getMessages(result);
-        String messageTemplate = messages.stream().collect(Collectors.joining(","));
+        var messages = validator.getMessages(ruleResult);
+        var messageTemplate = String.join(",", messages);
         context.buildConstraintViolationWithTemplate(messageTemplate)
                 .addConstraintViolation()
                 .disableDefaultConstraintViolation();

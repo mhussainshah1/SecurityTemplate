@@ -4,7 +4,6 @@ import com.example.demo.business.entities.User;
 import com.example.demo.business.entities.repositories.RoleRepository;
 import com.example.demo.business.entities.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,26 +54,25 @@ public class UserService {
 
     // returns currently logged in user
     public User getUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserName = authentication.getName();
-        User user = userRepository.findByUsername(currentUserName);
-        return user;
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var currentUserName = authentication.getName();
+        return userRepository.findByUsername(currentUserName);
     }
 
     public String encode(String password) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        var passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder.encode(password);
     }
 
     public boolean isAdmin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities()
                 .stream()
                 .anyMatch(r -> r.getAuthority().equals("ADMIN"));
     }
 
     public boolean isUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getAuthorities()
                 .stream()
                 .anyMatch(r -> r.getAuthority().equals("USER"));

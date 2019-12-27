@@ -1,24 +1,34 @@
 package com.example.demo.business.entities;
 
 import javax.persistence.*;
-import java.util.Collection;
+import javax.validation.constraints.NotEmpty;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-public class Role {
+@Table(name = "ROLE_DATA")
+public class Role implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @NotEmpty
     @Column(unique = true)
     private String role;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private Collection<User> user;
+    private Set<User> users;
 
     public Role() {
+        users = new HashSet<>();
     }
 
     public Role(String role) {
+        this();
         this.role = role;
     }
 
@@ -38,11 +48,25 @@ public class Role {
         this.role = role;
     }
 
-    public Collection<User> getUser() {
-        return user;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUser(Collection<User> user) {
-        this.user = user;
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        String string = "Role{" +
+                "id=" + id +
+                ", role='" + role + '\'' +
+                ", users=[";
+
+        for (User user : users) {
+            string += user;
+        }
+        string += "]}";
+        return string;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.business.services;
 
 import com.example.demo.business.entities.Course;
 import com.example.demo.business.entities.InvalidPassword;
@@ -8,13 +8,11 @@ import com.example.demo.business.entities.repositories.CourseRepository;
 import com.example.demo.business.entities.repositories.InvalidPasswordRepository;
 import com.example.demo.business.entities.repositories.RoleRepository;
 import com.example.demo.business.entities.repositories.UserRepository;
-import com.example.demo.business.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -36,7 +34,7 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         //Password
-        Set<InvalidPassword> passwords = new HashSet<>();
+        var passwords = new HashSet<InvalidPassword>();
         passwords.add(new InvalidPassword("azerty12!"));
         passwords.add(new InvalidPassword("12345678!"));
         passwords.add(new InvalidPassword("password123"));
@@ -46,25 +44,30 @@ public class DataLoader implements CommandLineRunner {
         roleRepository.save(new Role("USER"));
         roleRepository.save(new Role("ADMIN"));
 
-        Role userRole = roleRepository.findByRole("USER");
-        Role adminRole = roleRepository.findByRole("ADMIN");
+        var userRole = roleRepository.findByRole("USER");
+        var adminRole = roleRepository.findByRole("ADMIN");
 
         //User
-        User moe = new User("mhussainshah79@gmail.com", "password", "Muhammad", "Shah", true, "moe");
-        moe.setPassword(userService.encode(moe.getPassword()));
+        var admin = new User("admin@admin.com", userService.encode("password"), "Admin", "User", true, "admin");
+        userService.saveAdmin(admin);
+
+        var moe = new User("mhussainshah79@gmail.com", userService.encode("password"), "Muhammad", "Shah", true, "moe");
         userService.saveUser(moe);
 
-        User nan = new User("nhan.cog.huynh@gmail.com", "password", "Nhan", "Huynh", true, "nan");
-        nan.setPassword(userService.encode(nan.getPassword()));
+        var lan = new User("tolani.oyefule@gmail.com", userService.encode("password"), "Tolani", "Oyefule", true, "lan");
+        userService.saveUser(lan);
+
+        var nan = new User("nhan.cog.huynh@gmail.com", userService.encode("password"), "Nhan", "Huynh", true, "nan");
         userService.saveUser(nan);
 
-        User tolani = new User("tolani.oyefule@gmail.com", "password", "Tolani", "Oyefule", true, "lan");
-        tolani.setPassword(userService.encode(tolani.getPassword()));
-        userService.saveUser(tolani);
+        var dag = new User("dag@gmail.com", userService.encode("password"), "Dag", "Fasil", true, "dag");
+        userService.saveUser(dag);
 
-        User admin = new User("admin@admin.com", "Pa$$word2019", "Admin", "User", true, "admin");
-        admin.setPassword(userService.encode(admin.getPassword()));
-        userService.saveUser(admin);
+        var mel = new User("melissafong@gmail.com", userService.encode("password"), "Mellisa", "Lavander", true, "mel");
+        userService.saveUser(mel);
+
+        var jen = new User("jen@gmail.com", userService.encode("password"), "Jennifer", "You", true, "jen");
+        userService.saveUser(jen);
 
         Course course = new Course("Astrophysics", "Neil D Tyson", "Just a course on stars", 3);
         course.setUser(nan);
@@ -75,7 +78,7 @@ public class DataLoader implements CommandLineRunner {
         courseRepository.save(course);
 
         course = new Course("Freshman English", "Geraldine Pegram", "Learn your language chilern", 3);
-        course.setUser(tolani);
+        course.setUser(lan);
         courseRepository.save(course);
     }
 }

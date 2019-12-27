@@ -1,14 +1,20 @@
 package com.example.demo.business.entities;
 
+import com.example.demo.business.util.ValidPassword;
+
 import javax.persistence.*;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import java.util.Collection;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "User_Data")
-public class User {
+@Table(name = "USER_DATA")
+public class User implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -19,7 +25,7 @@ public class User {
     private String email;
 
     @NotEmpty
-    //@ValidPassword
+    @ValidPassword
     @Column(name = "password")
     private String password;
 
@@ -36,15 +42,16 @@ public class User {
     private boolean enabled;
 
     @NotEmpty
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
+    private Set<Role> roles;
 
     public User() {
+        roles = new HashSet<>();
     }
 
     public User(@NotEmpty @Email String email,
@@ -53,6 +60,7 @@ public class User {
                 @NotEmpty String lastName,
                 @AssertTrue boolean enabled,
                 @NotEmpty String username) {
+        this();
         this.email = email;
         this.password = password;
         this.firstName = firstName;
@@ -117,12 +125,54 @@ public class User {
         this.username = username;
     }
 
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 
+    @Override
+    public String toString() {
+        String string = "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", enabled=" + enabled +
+                ", username='" + username + '\'' +
+                ", roles= [";
+             /*   for(Role role : roles){
+                    string += role.getRole();
+                }*/
+
+        string += "], items=[";
+
+                /*for(Item item : items){
+                    string += item.getName();
+                }*/
+
+        string += "]}";
+
+        return string;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+
+        User user = (User) o;
+        if (id != user.id) return false;
+        return username.equals(user.username);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + username.hashCode();
+        return result;
+    }
 }
