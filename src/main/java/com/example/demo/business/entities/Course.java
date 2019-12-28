@@ -4,6 +4,7 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -20,6 +21,9 @@ public class Course {
     @Size(min = 3)
     private String instructor;
 
+    @NotNull
+    private String picturePath;
+
     @NonNull
     @Size(min = 10)
     private String description;
@@ -33,11 +37,18 @@ public class Course {
     private User user;
 
     public Course() {
+        picturePath = "";
+        user = new User();
     }
 
-    public Course(@Size(min = 4) String title, @Size(min = 3) String instructor, @Size(min = 10) String description, @Min(3) int credit) {
+    public Course(@Size(min = 4) String title,
+                  @Size(min = 3) String instructor,
+                  @NotNull String picturePath,
+                  @Size(min = 10) String description,
+                  @Min(3) int credit) {
         this.title = title;
         this.instructor = instructor;
+        this.picturePath = picturePath;
         this.description = description;
         this.credit = credit;
     }
@@ -64,6 +75,14 @@ public class Course {
 
     public void setInstructor(String instructor) {
         this.instructor = instructor;
+    }
+
+    public String getPicturePath() {
+        return picturePath;
+    }
+
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
     }
 
     public String getDescription() {

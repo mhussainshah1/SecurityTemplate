@@ -4,37 +4,48 @@
       xmlns:th="http://www.thymeleaf.org">
 
 <head th:replace="base::header">
-    <title>Show</title>
+    <title>Course Details</title>
 </head>
 
 <body>
 <div th:replace="base::nav"></div>
 
 <div class="container text-left">
-    <h2>Course Details</h2><br/>
-    <table class="table">
-        <tr>
-            <td>Title:</td>
-            <td><span th:text="${course.title}"></span><br/></td>
-        </tr>
-        <tr>
-            <td>Instructor:</td>
-            <td><span th:text="${course.instructor}"></span><br/></td>
-        </tr>
-        <tr>
-            <td>Description:</td>
-            <td><span th:text="${course.description}"></span><br/></td>
-        </tr>
-        <tr>
-            <td>Credits:</td>
-            <td><span th:text="${course.credit}"></span><br/></td>
-        </tr>
-    </table>
+    <h2>Course Details</h2>
+
+    <div class="row">
+        <div class="col"><p>Title:</p></div>
+        <div class="col"><p th:text="${course.title}"></p></div>
+    </div>
+
+    <div class="row">
+        <div class="col"><p>Instructor:</p></div>
+        <div class="col"><p th:text="${course.instructor}"></p></div>
+    </div>
+
+    <div class="row">
+        <div class="col"><p>Picture:</p></div>
+        <div class="col">
+            <img class="profile-picture"
+                 alt="picture"
+                 src="#"
+                 th:alt="Picture"
+                 th:src="${course.picturePath}"> <!-- th:text="${message.picturePath}" -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col"><p>Description:</p></div>
+        <div class="col"><p th:text="${course.description}"></p></div>
+    </div>
+
+    <div class="row">
+        <div class="col"><p>Credits:</p></div>
+        <div class="col"><p th:text="${course.credit}"></p></div>
+    </div>
 
     <div class="row" sec:authorize="isAuthenticated()">
-        <div class="col">
-            <p>User:</p>
-        </div>
+        <div class="col"><p>User:</p></div>
         <div class="col">
             <p th:text="${course.user.firstName} +' ' +${course.user.lastName}"></p>
         </div>
@@ -50,6 +61,8 @@
 </div>
 
 <div th:replace="base::delete"></div>
+
 <div th:replace="base::footer"></div>
+
 </body>
 </html>

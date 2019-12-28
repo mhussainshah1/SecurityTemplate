@@ -69,15 +69,15 @@ public class DataLoader implements CommandLineRunner {
         var jen = new User("jen@gmail.com", userService.encode("password"), "Jennifer", "You", true, "jen");
         userService.saveUser(jen);
 
-        Course course = new Course("Astrophysics", "Neil D Tyson", "Just a course on stars", 3);
+        Course course = new Course("Astrophysics", "Neil D Tyson", "https://res.cloudinary.com/toyefule/image/upload/c_fill,g_face,h_150,r_50,w_150/v1553799014/Outfit/JESUS_IS_MY_HOMEBOY_heathergrey_2000x.jpg", "Just a course on stars", 3);
         course.setUser(nan);
         courseRepository.save(course);
 
-        course = new Course("Calculus", "Carol Henley", "Rate of change of rate of change", 3);
+        course = new Course("Calculus", "Carol Henley", "https://res.cloudinary.com/toyefule/image/upload/c_fill,g_face,h_150,r_50,w_150/v1553799014/Outfit/JESUS_IS_MY_HOMEBOY_heathergrey_2000x.jpg", "Rate of change of rate of change", 3);
         course.setUser(moe);
         courseRepository.save(course);
 
-        course = new Course("Freshman English", "Geraldine Pegram", "Learn your language chilern", 3);
+        course = new Course("Freshman English", "Geraldine Pegram", "https://res.cloudinary.com/toyefule/image/upload/c_fill,g_face,h_150,r_50,w_150/v1553799014/Outfit/JESUS_IS_MY_HOMEBOY_heathergrey_2000x.jpg", "Learn your language chilern", 3);
         course.setUser(lan);
         courseRepository.save(course);
     }
